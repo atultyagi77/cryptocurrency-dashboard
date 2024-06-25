@@ -11,7 +11,7 @@ export const Footer = () => {
               href="https://github.com/pavandeveloperr"
               className="hover:underline hover:text-blue-400"
             >
-              Atul{" "}
+              Pavan Kulkarni{" "}
             </a>
           </h3>
         </div>
