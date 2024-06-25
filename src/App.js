@@ -1,18 +1,18 @@
 import React from "react";
-import "./App.css";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import Dashboard from "./components/Dashboard";
 import { CryptoProvider } from "./context/CryptoContext";
+import "./App.css"; // Includes Tailwind CSS directives
 
-//App is the parent component of dashboard
-
+// App is parent component
 function App() {
-
   return (
     <Provider store={store}>
       <CryptoProvider>
-        <Dashboard />
+        <div className="min-h-screen bg-gray-100">
+          <Dashboard />
+        </div>
       </CryptoProvider>
     </Provider>
   );

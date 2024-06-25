@@ -1,7 +1,7 @@
 import debounce from "lodash.debounce";
 import React, { useContext, useRef, useState } from "react";
 import { CryptoContext } from "../context/CryptoContext";
-import selectIcon from "../assets/select-icon.svg";
+import selectIcon from "../assets/selecticon.svg";
 import "../App.css";
 
 // user can search cryptos which will result in sidebar

@@ -1,11 +1,10 @@
 import React, { useContext } from "react";
 import { CryptoContext } from "../context/CryptoContext";
-import selectIcon from "../assets/select-icon.svg";
+import selectIcon from "../assets/selecticon.svg";
 import Pagination from "./Pagination";
 
 
-/* sidebar contains crypto details such as CoinName, market cap,
-and 24h price change, filter options like sorting and reset button */
+/* Sidebar contains crypto details such as CoinName and market cap */
  
 export const SideBar = () => {
   const { cryptoData, setSortBy, resetFunction, currency } = useContext(CryptoContext);
@@ -19,7 +18,7 @@ export const SideBar = () => {
         </p>
       </div>
 
-      {/* user can sort between cryptocurrencies */}
+      {/* user can sort between other cryptocurrencies */}
       <label className="flex relative justify-end mt-2 items-center ">
         <select
           id="Sorting Options"
@@ -44,7 +43,7 @@ export const SideBar = () => {
           right-[5.2rem] pointer-events-none"
         />
 
-      {/* user can reset the sidebar with reset button */}
+      {/* user can reset the sidebar button */}
       <button
           className="w-[1.6rem] flex absolute hover:scale-110 transition-all transition-ease"
           onClick={resetFunction}

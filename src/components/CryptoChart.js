@@ -2,11 +2,10 @@ import React, { useEffect, useContext, useState } from "react";
 import { Line, Bar } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import { CryptoContext } from "../context/CryptoContext";
-import selectIcon from "../assets/select-icon.svg";
+import selectIcon from "../assets/selecticon.svg";
 
 Chart.register(...registerables);
 
-//this component contains charts , dropdowns and buttons related to charts
 export const CryptoChart = () => {
   const { currency, cryptoId } = useContext(CryptoContext);
   const [chartData, setChartData] = useState([]);
@@ -16,16 +15,25 @@ export const CryptoChart = () => {
   const [chartType, setChartType] = useState("LineChart");
 
   useEffect(() => {
-    fetch(
-      `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=${currency}&days=${days}&interval=${interval}`
-    ).then((response) => {
-      const res = response.json();
-      res.then((data) => {
-        // console.log("chartData", data);
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=${currency}&days=${days}&interval=${interval}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
         setChartData(data.prices);
-      });
-    });
-  }, [days, id, currency]);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    fetchData();
+  }, [days, id, currency, interval]);
 
   const ChartData = chartData.map((value) => ({
     x: value[0],
@@ -33,24 +41,28 @@ export const CryptoChart = () => {
   }));
 
   function oneDay() {
-    setInterval((prevInterval) => "hourly");
-    setDays((prevDays) => 1);
+    setInterval("hourly");
+    setDays(1);
   }
+
   function oneWeek() {
-    setDays((prevDays) => 7);
-    setInterval((prevInterval) => "daily");
+    setDays(7);
+    setInterval("daily");
   }
+
   function oneMonth() {
-    setDays((prevDays) => 30);
-    setInterval((prevInterval) => "daily");
+    setDays(30);
+    setInterval("daily");
   }
+
   function sixMonths() {
-    setDays((prevDays) => 180);
-    setInterval((prevInterval) => "monthly");
+    setDays(180);
+    setInterval("monthly");
   }
+
   function oneYear() {
-    setDays((prevDays) => 365);
-    setInterval((prevInterval) => "yearly");
+    setDays(365);
+    setInterval("yearly");
   }
 
   return (
@@ -107,7 +119,6 @@ export const CryptoChart = () => {
         >
           1Y
         </button>
-        {/* this menu contains cryptocurrencies */}
         <div className="flex absolute items-center rounded-md bg-gray-100 text-white bg-opacity-30 backdrop-blur-md p-2 w-24 lg:left-[16rem] lg:mt-4 md:left-[25rem] md:mt-4 sm:right-[9rem] mt-20 ml-2">
           <select
             onChange={(e) => {
@@ -125,7 +136,6 @@ export const CryptoChart = () => {
           <span>
           <img src={selectIcon} alt="selecticon" className="w-[0.7rem] h-auto relative lg:right-[0.4rem] right-[0.4rem] sm:right-[0.4rem] pointer-events-none" />
           </span>
-          {/* user can select different types of charts */}
           <div className="rounded-md bg-gray-100 bg-opacity-30 backdrop-blur-md text-white p-2 absolute lg:left-[6rem] md:left-[6rem] left-[6rem] w-28 ml-5">
             <select
               onChange={(e) => setChartType(e.target.value)}
@@ -134,12 +144,10 @@ export const CryptoChart = () => {
               <option className="text-gray-600" value={`LineChart`}>Line Chart</option>
               <option className="text-gray-600" value={`BarChart`}>Bar Chart</option>
               <option className="text-gray-600" value={`BarChartH`}>Bar Chart Horizontal</option>
-             
             </select>
             <span className="absolute top-[0.9rem] right-[0.7rem] w-[0.7rem] h-auto">
           <img src={selectIcon} alt="selecticon" className="lg:right-[0.4rem] right-[0.4rem] sm:right-[0.4rem] pointer-events-none" />
           </span>
-            
           </div>
         </div>
       </div>
@@ -178,51 +186,37 @@ export const CryptoChart = () => {
                 ],
               }}
               options={{
-                color: "white",
                 responsive: true,
-                indexAxis: "x",
-                tension: 0.01,
+                elements: {
+                  point: {
+                    radius: 1,
+                  },
+                },
                 scales: {
                   x: {
                     grid: {
                       display: false,
-                      drawBorder: false,
-                      borderDash: [6],
-                      border: false,
                     },
                     ticks: {
-                      source: "auto",
-                      maxTicksLimit: 20,
-                      font: {
-                        size: "10px",
-                      },
                       color: "white",
                     },
                   },
                   y: {
-                    grid: {
-                      border: false,
-                      drawBorder: false,
+                    ticks: {
+                      color: "white",
                     },
-                    ticks : {
-                      color : "white"
-                    }
                   },
                 },
                 plugins: {
-                  tooltip: {
-                    displayColors: false,
-                    backgroundColor: "gray",
-                  },
                   legend: {
                     display: true,
-                    align : "end",
+                    align: "end",
                     labels: {
-                      color : "white",
-                      pointStyleWidth : 15,
+                      color: "white",
+                      pointStyleWidth: 15,
                       usePointStyle: true,
                       pointStyle: "circle",
-                      padding: 2,
+                      padding: 10,
                     },
                   },
                   title: {
@@ -237,7 +231,7 @@ export const CryptoChart = () => {
       ) : chartType === "BarChart" ? (
         <div className="row mx-2">
           <div
-            className="w-full h-[400px] my-10 px-2 mt-16"
+            className="w-full h-[300px] my-10 px-2 mt-16"
             style={{ height: 290 }}
           >
             <Bar
@@ -273,26 +267,26 @@ export const CryptoChart = () => {
                     },
                     ticks: {
                       maxTicksLimit: 20,
-                      color : "white",
+                      color: "white",
                     },
                   },
-                  y : {
-                    ticks : {
-                      color : "white",
-                    }
-                  }
+                  y: {
+                    ticks: {
+                      color: "white",
+                    },
+                  },
                 },
                 plugins: {
                   legend: {
                     display: true,
                     align: "end",
-                      labels: {
-                        color : "white",
-                        pointStyleWidth : 15,
-                        usePointStyle: true,
-                        pointStyle: "circle",
-                        padding: 5,
-                      },
+                    labels: {
+                      color: "white",
+                      pointStyleWidth: 15,
+                      usePointStyle: true,
+                      pointStyle: "circle",
+                      padding: 5,
+                    },
                   },
                   title: {
                     display: true,
@@ -345,27 +339,27 @@ export const CryptoChart = () => {
                     grid: {
                       display: false,
                     },
-                    ticks : {
-                      color : "white",
-                    }
+                    ticks: {
+                      color: "white",
+                    },
                   },
                   y: {
-                    ticks : {
-                      color : "white",
-                    }
-                  }
+                    ticks: {
+                      color: "white",
+                    },
+                  },
                 },
                 plugins: {
-                    legend: {
-                      display: true,
-                      align: "end",
-                      labels: {
-                        color : "white",
-                        pointStyleWidth : 15,
-                        usePointStyle: true,
-                        pointStyle: "circle",
-                        padding: 4,
-                      },
+                  legend: {
+                    display: true,
+                    align: "end",
+                    labels: {
+                      color: "white",
+                      pointStyleWidth: 15,
+                      usePointStyle: true,
+                      pointStyle: "circle",
+                      padding: 4,
+                    },
                   },
                   title: {
                     display: true,

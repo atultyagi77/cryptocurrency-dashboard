@@ -40,6 +40,7 @@ const ProductCard = ({ product }) => {
 
         </div>
 
+
     );
 };
 

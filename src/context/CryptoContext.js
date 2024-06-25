@@ -93,7 +93,8 @@ export const CryptoProvider = ({ children }) => {
         setCoinSearch,
         setSearchData,
         resetFunction,
-        cryptoId
+        cryptoId,
+        setCoinId
       }}
     >
       {children}
